@@ -235,8 +235,16 @@ stage('Prod') {
     archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/prod-deploy.txt'
   }
 }
-  } // stages
-  
+
+stage('triggerRelease') {
+  agent any
+  when { beforeAgent true; branch 'main' }
+  steps {
+    cloudBeesFlowTriggerRelease configuration: 'cd', parameters: '{"release":{"releaseName":"poc-release","stages":[{"stageName":"Stage 1","stageValue":""}],"pipelineName":"pipeline_poc-release","parameters":[]}}', projectName: 'POC', releaseName: 'poc-release', startingStage: ''
+  }
+}
+    } // stages
+
 post {
   success { echo "Pipeline succeeded on branch ${env.BRANCH_NAME}" }
   failure { echo "Pipeline failed on branch ${env.BRANCH_NAME}" }
