@@ -240,8 +240,7 @@ stage('triggerRelease') {
   agent any
   when { beforeAgent true; branch 'main' }
   steps {
-    cloudBeesFlowTriggerRelease configuration: 'cd', parameters: '{"release":{"releaseName":"poc-release","stages":[{"stageName":"Stage 1","stageValue":""}],"pipelineName":"pipeline_poc-release","parameters":[]}}', projectName: 'POC', releaseName: 'poc-release', startingStage: ''
-  }
+    cloudBeesFlowTriggerRelease configuration: 'cd', parameters: '{"release":{"releaseName":"Reg Oct Release","stages":[{"stageName":"Prod","stageValue":""},{"stageName":"QA","stageValue":""},{"stageName":"Release Readiness","stageValue":""}],"pipelineName":"Template Release Workflow","parameters":[]}}', projectName: 'POC', releaseName: 'Reg Oct Release', startingStage: ''  }
 }
     } // stages
 
