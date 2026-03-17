@@ -29,7 +29,7 @@ pipeline {
 
   stages {
     stage('Checkout') {
-      agent { label 'default' }
+      agent { label 'any' }
       steps {
         checkout scm
         sh 'git rev-parse --abbrev-ref HEAD || true'
@@ -37,7 +37,7 @@ pipeline {
     }
 
     stage('Build') {
-      agent { label 'default' }
+      agent { label 'any' }
       stages {
 
         stage('Setup') {
@@ -203,21 +203,7 @@ pipeline {
         sh 'mkdir -p reports; echo "dev-deploy:ok" > reports/dev-deploy.txt'
         archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/dev-deploy.txt'
       }
-    }
-
-        stage('Registering build DEV artifact') {
-            steps {
-                echo 'Registering the metadata'
-                registerBuildArtifactMetadata(
-                    name: "verizon-poc-app",
-                    url: "http://localhost:1111",
-                    version: "1.1.${env.BUILD_NUMBER}",
-                    digest: "c36a82d0ecc29d54b2e8edb291e1fceb",
-                    label: "dev",
-                    type: "docker"
-                )
-            }
-        }    
+    }  
 
     stage('Test') {
       agent { label 'default' }
@@ -234,20 +220,6 @@ pipeline {
         }
       }
     }
-
-        stage('Registering build QA artifact') {
-            steps {
-                echo 'Registering the metadata'
-                registerBuildArtifactMetadata(
-                    name: "verizon-poc-app",
-                    url: "http://localhost:1111",
-                    version: "1.1.${env.BUILD_NUMBER}",
-                    digest: "118ea58ed34e4a64ab399a3785be73f6",
-                    label: "qa",
-                    type: "docker"
-                )
-            }
-        }
     
 stage('Prod') {
   agent any
@@ -263,21 +235,6 @@ stage('Prod') {
     archiveArtifacts allowEmptyArchive: true, artifacts: 'reports/prod-deploy.txt'
   }
 }
-        stage('Registering build Prod artifact') {
-            steps {
-                echo 'Registering the metadata'
-                registerBuildArtifactMetadata(
-                    name: "verizon-poc-app",
-                    url: "http://localhost:1111",
-                    version: "1.1.${env.BUILD_NUMBER}",
-                    digest: "6c7e94d0208c135e34260e138733f0d5",
-                    label: "prod",
-                    type: "docker"
-                )
-            }
-        }
-    
-
   } // stages
   
 post {
