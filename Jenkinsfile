@@ -29,7 +29,7 @@ pipeline {
 
   stages {
     stage('Checkout') {
-      agent { label 'any' }
+      agent { label 'default' }
       steps {
         checkout scm
         sh 'git rev-parse --abbrev-ref HEAD || true'
@@ -37,7 +37,7 @@ pipeline {
     }
 
     stage('Build') {
-      agent { label 'any' }
+      agent { label 'default' }
       stages {
 
         stage('Setup') {
